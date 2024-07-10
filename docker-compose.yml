@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  node1:
+    image: rethinkdb
+    command: rethinkdb --bind all
+    ports:
+      - "8080:8080"
+      - "28015:28015"
+      - "29015:29015"
+    networks:
+      - rethinkdb-net
+    container_name: rethinkdb-node1
+
+  node2:
+    image: rethinkdb
+    command: rethinkdb --bind all --join rethinkdb-node1:29015
+    networks:
+      - rethinkdb-net
+    container_name: rethinkdb-node2
+
+  node3:
+    image: rethinkdb
+    command: rethinkdb --bind all --join rethinkdb-node1:29015
+    networks:
+      - rethinkdb-net
+    container_name: rethinkdb-node3
+
+networks:
+  rethinkdb-net:
+    driver: bridge
